@@ -15,11 +15,18 @@ namespace Company.Function
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
         }
 
-        public static async Task GetDiscoverWeekly()
+        public static async Task<string> GetDiscoverWeekly()
         {
             HttpClient client = new HttpClient(); 
-            Environment.GetEnvironmentVariable("DISCOVER_TRACKS_ENDPOINT");
-            HttpResponseMessage response = await client.GetAsync()
+            
+            using (HttpResponseMessage response = await client.GetAsync(Environment.GetEnvironmentVariable("DISCOVER_TRACKS_ENDPOINT")))
+            {
+                if (response.StatusCode.Equals(200))
+                {
+                    return "Succes";
+                }
+                return "Failed";
+            }
         }
     }
 }
