@@ -10,17 +10,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: AzureFunctionApp@1
+- task: PublishBuildArtifacts@1
   inputs:
-    azureSubscription: 'Free Trial (e74e9a9e-dbb4-41dc-95d1-9355a8eff48b)'
-    appType: 'functionApp'
-    appName: 'SpotifyGrab'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    deploymentMethod: 'auto'
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
