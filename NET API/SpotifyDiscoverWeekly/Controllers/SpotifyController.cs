@@ -1,29 +1,29 @@
-using System;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Extensions.Logging;
+﻿using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace Company.Function
+namespace SpotifyDiscoverWeekly.Controllers
 {
-    public static class DiscoverGrab
+    [Route("api/[controller]")]
+    [ApiController]
+    public class SpotifyController : ControllerBase
     {
-        [FunctionName("DiscoverGrab")]
-        public static async Task Run([TimerTrigger("0 0 23 * * MON")]TimerInfo myTimer, ILogger log)
+        [HttpGet]
+        public async Task<object> GetTracks()
         {
             var accessToken = await AuthenticateSpotify();
-            await GetDiscoverWeekly(accessToken); //probably store in the queue and reference with another func
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            var discoverWeeklyTracks = await GetDiscoverWeekly(accessToken);
+            return discoverWeeklyTracks;
         }
         public static async Task<string> AuthenticateSpotify()
         {
             HttpClient client = new HttpClient();
-            byte[] grantArray = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SPOTIFY_AUTH"));
-            byte[] authArray = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_CREDENTIALS"));
-            var authString = System.Convert.ToBase64String(authArray);
+            byte[] grantArray = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SPOTIFY_AUTH"));
+            byte[] authArray = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_CREDENTIALS"));
+            var authString = Convert.ToBase64String(authArray);
             var grantBody = System.Web.HttpUtility.UrlEncode(grantArray);
             client.DefaultRequestHeaders.Add("Authorizaton", authString);
             using (HttpResponseMessage response = await client.PostAsJsonAsync(Environment.GetEnvironmentVariable("SPOTIFY_AUTH_ENDPOINT"), grantBody))
@@ -34,7 +34,7 @@ namespace Company.Function
         }
         public static async Task<object> GetDiscoverWeekly(string accessToken)
         {
-            HttpClient client = new HttpClient(); 
+            HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", accessToken);
             using (HttpResponseMessage response = await client.GetAsync(Environment.GetEnvironmentVariable("SPOTIFY_DISCOVER_TRACKS_ENDPOINT")))
             {
