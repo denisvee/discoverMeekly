@@ -12,26 +12,13 @@ namespace SpotifyDiscoverWeekly.Controllers
     public class SpotifyController : ControllerBase
     {
         [HttpGet]
-        public async Task<object> GetTracks()
+        public async Task<string> GetTracks()
         {
-            var accessToken = await AuthenticateSpotify();
-            var discoverWeeklyTracks = await GetDiscoverWeekly(accessToken);
-            return discoverWeeklyTracks;
+            var accessToken = Redirect("https://accounts.spotify.com/authorize?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}");
+            //var discoverWeeklyTracks = await GetDiscoverWeekly(accessToken.);
+            return "succes";
         }
-        public static async Task<string> AuthenticateSpotify()
-        {
-            HttpClient client = new HttpClient();
-            byte[] grantArray = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SPOTIFY_AUTH"));
-            byte[] authArray = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_CREDENTIALS"));
-            var authString = Convert.ToBase64String(authArray);
-            var grantBody = System.Web.HttpUtility.UrlEncode(grantArray);
-            client.DefaultRequestHeaders.Add("Authorizaton", authString);
-            using (HttpResponseMessage response = await client.PostAsJsonAsync(Environment.GetEnvironmentVariable("SPOTIFY_AUTH_ENDPOINT"), grantBody))
-            {
-                var accessToken = await response.Content.ReadAsStringAsync();
-                return accessToken;
-            }
-        }
+
         public static async Task<object> GetDiscoverWeekly(string accessToken)
         {
             HttpClient client = new HttpClient();
