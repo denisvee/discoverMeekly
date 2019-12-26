@@ -12,7 +12,8 @@ local.settings.json
 *.DS_Store
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-*.env
+.env
+.vscode
 *.ipynb_checkpoints
 .cache-Denis Vashchenko
 *.DS_Store
