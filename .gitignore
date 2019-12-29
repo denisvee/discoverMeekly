@@ -13,7 +13,7 @@ local.settings.json
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 .env
-.vscode
+
 *.ipynb_checkpoints
 .cache-Denis Vashchenko
 *.DS_Store
@@ -267,3 +267,13 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+.python_packages
+.venv
+.vscode
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+envs.txt
