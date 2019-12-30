@@ -8,6 +8,8 @@ import requests
 import json
 import itertools
 
+import azure.functions as func
+
 def get_token():
     refresh_token = os.environ['SPOTIFY_REFRESH_TOKEN']
     client_id = os.environ['SPOTIFY_CLIENT_ID']
