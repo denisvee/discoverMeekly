@@ -26,7 +26,7 @@ def add_records(uris):
     username = os.environ['AZURE_USER']
     password = os.environ['AZURE_PW']
     driver= '{ODBC Driver 17 for SQL Server}'
-    cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+password)
+    cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+',1433'';DATABASE='+database+';UID='+username+';PWD='+password)
     cursor = cnxn.cursor()
     for uri in uris:
         cursor.execute("INSERT INTO DiscoverWeeklyUris VALUES (?)", uri)
