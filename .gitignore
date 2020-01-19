@@ -270,7 +270,7 @@ __pycache__/
 
 .python_packages
 .venv
-.vscode
+
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
