@@ -1,8 +1,12 @@
 import logging
 import pyodbc
+import json
 import os
 
 import azure.functions as func
+
+def average_analysis():
+    # Call spotify API and return average feature values for buckets
 
 def get_uris():
     uris = []
@@ -22,17 +26,22 @@ def get_uris():
     return buckets
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
     uris = []
-
+    logging.info('Python HTTP trigger function processed a request.')
     if (req.params.get('req_type') == 'get_uris'):
         return func.HttpResponse(
             status_code = 200,
-            body = json.dump(get_uris())
+            body = json.dumps(get_uris())
         )
-    # elif (req.params.get('req_type') == 'song_analysis'):
-    #     return song_analysis()
-
+    elif (req.params.get('req_type') == 'song_analysis'):
+        return func.HttpResponse(
+            body = json.dumps(song_analysis())
+        )
+    else:
+        return func.HttpResponse(
+            body = "Check req_type parameter",
+            status_code = 404
+        ) 
     return func.HttpResponse(
         status_code = 200
     )
