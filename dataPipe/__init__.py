@@ -4,10 +4,9 @@ import os
 
 import azure.functions as func
 
-songs = []
-buckets = []
-
-def getUris():
+def get_uris():
+    uris = []
+    buckets = []
     server = 'discoverweeklys.database.windows.net'
     database = 'discoverWeeklys'
     username = os.environ['AZURE_USER']
@@ -17,27 +16,23 @@ def getUris():
     cursor = cnxn.cursor()
     cursor.execute('SELECT * FROM DiscoverWeeklyUris')
     for row in cursor.fetchall():
-        songs.append(row[0])
-    for i in range(0, len(songs), 30):
-             buckets.append(songs[i:i + 30])
+        uris.append(row[0])
+    for i in range(0, len(uris), 30):
+             buckets.append(uris[i:i + 30])
+    return buckets
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
+    uris = []
 
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return func.HttpResponse(f"Hello {name}!")
-    else:
+    if (req.params.get('req_type') == 'get_uris'):
         return func.HttpResponse(
-             "Please pass a name on the query string or in the request body",
-             status_code=400
+            status_code = 200,
+            body = json.dump(get_uris())
         )
-    
+    # elif (req.params.get('req_type') == 'song_analysis'):
+    #     return song_analysis()
+
+    return func.HttpResponse(
+        status_code = 200
+    )
