@@ -18,16 +18,17 @@ def get_token():
     token_url = 'https://accounts.spotify.com/api/token'
     token_params = {'refresh_token': refresh_token, 'client_id': client_id,'client_secret': client_secret, 'grant_type': 'refresh_token', 'redirect_uri': 'https://denisvashchenko.com/'}
     response = requests.post(token_url, params=token_params, headers=headers)
-    return response.json()['access_token']
+    return response.json()['access_token']    
 
 def add_records(uris):
-    server = 'discoverweeklys.database.windows.net'
+    server = 'tcp:discoverweeklys.database.windows.net'
     database = 'discoverWeeklys'
     username = os.environ['AZURE_USER']
     password = os.environ['AZURE_PW']
-    driver= '{ODBC Driver 17 for SQL Server}'
+    driver= '{ODBC Driver 13 for SQL Server}'
     cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+',1433'+';DATABASE='+database+';UID='+username+';PWD='+password)
     cursor = cnxn.cursor()
+    cursor.execut("SELECT * FROM ")
     for uri in uris:
         cursor.execute("INSERT INTO DiscoverWeeklyUris VALUES (?)", uri)
         cnxn.commit()
