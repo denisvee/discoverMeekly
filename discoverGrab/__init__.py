@@ -21,14 +21,11 @@ def get_token():
     return response.json()['access_token']    
 
 def add_records(uris):
-    server = 'tcp:discoverweeklys.database.windows.net'
-    database = 'discoverWeeklys'
     username = os.environ['AZURE_USER']
     password = os.environ['AZURE_PW']
-    driver= '{ODBC Driver 13 for SQL Server}'
-    cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+',1433'+';DATABASE='+database+';UID='+username+';PWD='+password)
+    connection_string = "Driver={ODBC Driver 17 for SQL Server};Server=tcp:discoverweeklys.database.windows.net,1433;Database=discoverWeeklys;Uid="+username+";Pwd="+password+";Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+    cnxn = pyodbc.connect(connection_string)
     cursor = cnxn.cursor()
-    cursor.execut("SELECT * FROM ")
     for uri in uris:
         cursor.execute("INSERT INTO DiscoverWeeklyUris VALUES (?)", uri)
         cnxn.commit()

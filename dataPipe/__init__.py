@@ -66,12 +66,11 @@ def feature_analysis(bucket_uris):
 def get_uris():
     uris = []
     buckets = []
-    server = 'discoverweeklys.database.windows.net'
-    database = 'discoverWeeklys'
     username = os.environ['AZURE_USER']
     password = os.environ['AZURE_PW']
-    driver= '{ODBC Driver 17 for SQL Server}'
-    cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+',1433'+';DATABASE='+database+';UID='+username+';PWD='+password)
+    connection_string = "Driver={ODBC Driver 17 for SQL Server};Server=tcp:discoverweeklys.database.windows.net,1433;Database=discoverWeeklys;Uid="+username+";Pwd="+password+";Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+    logging.info(connection_string)
+    cnxn = pyodbc.connect(connection_string)
     cursor = cnxn.cursor()
     cursor.execute('SELECT * FROM DiscoverWeeklyUris')
     for row in cursor.fetchall():
