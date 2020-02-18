@@ -23,7 +23,7 @@ def get_token():
 def add_records(uris):
     username = os.environ['AZURE_USER']
     password = os.environ['AZURE_PW']
-    connection_string = "Driver={ODBC Driver 17 for SQL Server};Server=tcp:discoverweeklys.database.windows.net,1433;Database=discoverWeeklys;Uid="+username+";Pwd="+password+";Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+    connection_string = "Driver={ODBC Driver 17 for SQL Server};Server=tcp:discoverweeklys.database.windows.net,1433;Database=discoverWeeklys;Uid="+username+";Pwd="+password+";Encrypt=yes;TrustServerCertificate=no;Connection Timeout=60;"
     cnxn = pyodbc.connect(connection_string)
     cursor = cnxn.cursor()
     for uri in uris:
